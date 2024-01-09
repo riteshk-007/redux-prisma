@@ -58,3 +58,22 @@ export const PUT = async (req, { params }) => {
     });
   }
 };
+
+export const DELETE = async (req, { params }) => {
+  const id = params.update;
+  try {
+    const deleteUser = await prisma.user.delete({ where: { id: id } });
+    return NextResponse.json({
+      status: 200,
+      message: "Successfully deleted user.",
+      deleteUser,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return NextResponse.json({
+      status: 500,
+      message: "Internal server error.",
+      error,
+    });
+  }
+};
