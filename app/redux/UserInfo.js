@@ -9,6 +9,25 @@ export const userInfo = createAsyncThunk("userinfo", async (id, thunkAPI) => {
     return thunkAPI.rejectWithValue({ error: error.message });
   }
 });
+
+export const udateUser = createAsyncThunk(
+  "updateuser",
+  async (info, thunkAPI) => {
+    try {
+      const response = await axios.put(`/api/get/${info.id}`, {
+        name: info.name,
+        email: info.email,
+        oldPassword: info.password,
+        newPassword: info.newPassword,
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue({ error: error.message });
+    }
+  }
+);
+
 export const InfoSlice = createSlice({
   name: "info",
   initialState: { user: [], loading: "idle", error: null },
@@ -23,6 +42,18 @@ export const InfoSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(userInfo.rejected, (state, action) => {
+      state.loading = "idle";
+      state.error = action.error;
+    });
+    // User update API call
+    builder.addCase(udateUser.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(udateUser.fulfilled, (state, action) => {
+      state.loading = "idle";
+      state.user = action.payload;
+    });
+    builder.addCase(udateUser.rejected, (state, action) => {
       state.loading = "idle";
       state.error = action.error;
     });

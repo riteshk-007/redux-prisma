@@ -1,13 +1,18 @@
 "use client";
 
-import { userInfo } from "@/app/redux/UserInfo";
+import { udateUser, userInfo } from "@/app/redux/UserInfo";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const User = () => {
   const { id } = useParams();
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    oldPassword: "",
+    newPassword: "",
+  });
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(userInfo(id));
@@ -22,7 +27,9 @@ const User = () => {
   const handleChange = (e) => {
     setUserData({ ...userData, [e.target.id]: e.target.value });
   };
-
+  const handleClick = () => {
+    dispatch(udateUser(userData));
+  };
   return (
     <div className="bg-gray-100 h-screen flex flex-col justify-center items-center">
       <h1 className="text-3xl font-bold mb-4">User</h1>
@@ -62,33 +69,38 @@ const User = () => {
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="old-password"
+            htmlFor="password"
           >
             Old Password
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="old-password"
+            id="password"
             type="password"
             placeholder="Old Password"
+            value={userData?.oldPassword}
+            onChange={handleChange}
           />
         </div>
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="new-password"
+            htmlFor="newPassword"
           >
             New Password
           </label>
           <input
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="new-password"
+            id="newPassword"
             type="password"
             placeholder="New Password"
+            value={userData?.newPassword}
+            onChange={handleChange}
           />
         </div>
         <div className="flex items-center justify-between">
           <button
+            onClick={handleClick}
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >
