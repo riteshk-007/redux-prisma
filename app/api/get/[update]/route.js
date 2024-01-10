@@ -77,3 +77,22 @@ export const DELETE = async (req, { params }) => {
     });
   }
 };
+
+export const GET = async (req, { params }) => {
+  const id = params.update;
+  try {
+    const userInfo = await prisma.user.findUnique({ where: { id: id } });
+    return NextResponse.json({
+      status: 200,
+      message: "Successfully fetched user info.",
+      userInfo,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return NextResponse.json({
+      status: 500,
+      message: "Internal server error.",
+      error,
+    });
+  }
+};
