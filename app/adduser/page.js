@@ -24,10 +24,6 @@ const AddUser = () => {
     dispatch(createUser(userDetail));
   };
 
-  if (loading === "loading") {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className=" mx-auto flex items-center justify-center flex-col my-4">
       <h1 className="text-4xl font-bold text-center text-blue-500">Add User</h1>
@@ -68,9 +64,10 @@ const AddUser = () => {
         />
         <button
           onClick={handleSubmit}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          disabled={loading === "loading"}
         >
-          Add User{" "}
+          {loading === "loading" ? "Loading..." : "Submit"}
         </button>
       </div>
       <Link

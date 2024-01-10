@@ -22,8 +22,10 @@ const AllUser = () => {
             <div className="w-1/3 mx-5">Email</div>
           </div>
           <div className="flex flex-row">
-            <div className="flex w-96 flex-row border">
-              <div className="w-1/3 mx-5">Loading...</div>
+            <div className="flex w-96 flex-row border animate-pulse">
+              <div className="w-full text-center font-semibold mx-5">
+                Loading...
+              </div>
             </div>
           </div>
         </div>
@@ -41,7 +43,7 @@ const AllUser = () => {
         </div>
         <div className="flex flex-col">
           {user &&
-            user?.getData?.map((item, index) => {
+            user?.getData?.map((item) => {
               return (
                 <Link
                   href={`/alluser/${item?.id}`}
