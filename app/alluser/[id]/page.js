@@ -1,12 +1,13 @@
 "use client";
 
-import { udateUser, userInfo } from "@/app/redux/UserInfo";
-import { useParams } from "next/navigation";
+import { deleteUser, udateUser, userInfo } from "@/app/redux/UserInfo";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const User = () => {
   const { id } = useParams();
+  const router = useRouter();
   const [userData, setUserData] = useState({
     name: "",
     email: "",
@@ -29,6 +30,11 @@ const User = () => {
   };
   const handleClick = () => {
     dispatch(udateUser(userData));
+  };
+  const handleDelete = () => {
+    dispatch(deleteUser(id));
+
+    router.push("/");
   };
   return (
     <div className="bg-gray-100 h-screen flex flex-col justify-center items-center">
@@ -107,6 +113,7 @@ const User = () => {
             Update
           </button>
           <button
+            onClick={handleDelete}
             className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             type="button"
           >

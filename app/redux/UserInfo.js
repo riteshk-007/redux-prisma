@@ -27,7 +27,14 @@ export const udateUser = createAsyncThunk(
     }
   }
 );
-
+export const deleteUser = createAsyncThunk("deleteUser", async (id) => {
+  try {
+    const response = await axios.delete(`/api/get/${id}`);
+    return response.data;
+  } catch (error) {
+    return thunkAPI.rejectWithValue({ error: error.message });
+  }
+});
 export const InfoSlice = createSlice({
   name: "info",
   initialState: { user: [], loading: "idle", error: null },
@@ -54,6 +61,18 @@ export const InfoSlice = createSlice({
       state.user = action.payload;
     });
     builder.addCase(udateUser.rejected, (state, action) => {
+      state.loading = "idle";
+      state.error = action.error;
+    });
+    // Delete user API call
+    builder.addCase(deleteUser.pending, (state) => {
+      state.loading = "loading";
+    });
+    builder.addCase(deleteUser.fulfilled, (state, action) => {
+      state.loading = "idle";
+      state.user = action.payload;
+    });
+    builder.addCase(deleteUser.rejected, (state, action) => {
       state.loading = "idle";
       state.error = action.error;
     });
