@@ -5,12 +5,20 @@ import bcrypt from "bcrypt";
 export const POST = async (req) => {
   try {
     const { name, email, password } = await req.json();
+    const emailcheck = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
     if (!email || !password || !name)
       return NextResponse.json({
         status: 400,
-        message: "Missing required fields.",
+        error: "Missing required fields.",
       });
-
+    if (emailcheck)
+      return NextResponse.json({
+        status: 400,
+        error: "Email already exists.",
+      });
     let newPassword = await bcrypt.hash(password, 10);
     const newuser = await prisma.user.create({
       data: {
@@ -25,11 +33,11 @@ export const POST = async (req) => {
       newuser,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
     return NextResponse.json({
       status: 500,
       message: "Internal server error.",
-      error,
+      error: error.message,
     });
   }
 };
